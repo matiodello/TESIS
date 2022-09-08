@@ -336,5 +336,13 @@ tokken_coments.blas <- df_blas %>%
 
 
 
-
+tokken_coments.blas_1 <- df_blas %>% 
+  filter(noticia_link == "https://www.facebook.com/eldocetv/videos/598407367498733/") %>% 
+  unnest_tokens(word, comentarios_28) %>% 
+  filter(!word %in% my_stopwords$word,
+         !word %in% str_remove_all(my_stopwords$word, "'"),
+         str_detect(word, "[a-z]"),
+         !str_detect(word, "^[0-9]*$"),
+         !str_detect(word, "eldoce.tv")) %>% 
+  count(word, sort = TRUE)
 
