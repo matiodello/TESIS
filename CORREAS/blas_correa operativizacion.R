@@ -302,8 +302,28 @@ tokken_noticas.blas <- df_blas %>%
   count(word, sort = TRUE)
 
 
+bigramas_noticas.blas <- df_blas %>% 
+  unnest_tokens(word, cuerpo_de_la_noticia) %>% 
+  filter(!word %in% my_stopwords$word,
+         !word %in% str_remove_all(my_stopwords$word, "'"),
+         str_detect(word, "[a-z]"),
+         !str_detect(word, "^[0-9]*$"),
+         !str_detect(word, "eldoce.tv")) %>% 
+  count(word, sort = TRUE)
 
+bigramas_noticas.blas <- df_blas %>%
+  unnest_tokens(bigram, cuerpo_de_la_noticia, token = "ngrams", n = 2) %>%
+  separate(bigram, c("word1", "word2"), sep = " ") %>%
+  filter(!word1 %in% my_stopwords$word,
+         !word2 %in% my_stopwords$word) %>% 
+  unite(bigram, word1, word2, sep = " ") 
 
+bigramas_noticas.blas <- bigramas_noticas.blas %>% 
+  select(etiqueta_3, bigram)
+
+tabl1 <- bigramas_noticas.blas %>% 
+  count(bigram, sort = TRUE) %>% 
+  ungroup()
 
 
 # PROCESAMIENTO DE LENGUAJE - POSTEOS -------------------------------------
@@ -318,6 +338,19 @@ tokken_posteos.blas <- df_blas %>%
          !str_detect(word, "eldoce.tv")) %>% 
   count(word, sort = TRUE)
 
+bigramas_posteos.blas <- df_blas %>%
+  unnest_tokens(bigram, cuerpo_del_post, token = "ngrams", n = 2) %>%
+  separate(bigram, c("word1", "word2"), sep = " ") %>%
+  filter(!word1 %in% my_stopwords$word,
+         !word2 %in% my_stopwords$word) %>% 
+  unite(bigram, word1, word2, sep = " ") 
+
+bigramas_posteos.blas <- bigramas_posteos.blas %>% 
+  select(etiqueta_3, bigram)
+
+tabl2 <- bigramas_posteos.blas %>% 
+  count(bigram, sort = TRUE) %>% 
+  ungroup()
 
 
 
@@ -334,7 +367,27 @@ tokken_coments.blas <- df_blas %>%
   count(word, sort = TRUE)
 
 
+bigramas_comentarios.blas <- df_blas %>%
+  unnest_tokens(bigram, comentarios_28, token = "ngrams", n = 2) %>%
+  separate(bigram, c("word1", "word2"), sep = " ") %>%
+  filter(!word1 %in% my_stopwords$word,
+         !word2 %in% my_stopwords$word) %>% 
+  unite(bigram, word1, word2, sep = " ") 
 
+bigramas_comentarios.blas <- bigramas_comentarios.blas %>% 
+  select(etiqueta_3, bigram)
+
+tabl3 <- bigramas_comentarios.blas %>% 
+  count(bigram, sort = TRUE) %>% 
+  filter(str_detect(bigram, "[a-z]"),
+        !str_detect(bigram, "^[0-9]*$")) %>% 
+  ungroup()
+
+
+
+
+
+## Después de hacer la tokkenización general, tokkenizamos por publicación específicas.
 
 tokken_coments.blas_1 <- df_blas %>% 
   filter(noticia_link == "https://www.facebook.com/eldocetv/videos/598407367498733/") %>% 
