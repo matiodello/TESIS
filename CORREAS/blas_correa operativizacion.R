@@ -34,7 +34,7 @@ library(widyr) #Encontrar correlaciones entre textos
 library(ggraph) #plottear redes/mapas
 library(igraph) #plottear redes/mapas
 library(janitor) #Limpieza de nombres
-library(editData)
+library(DataEditR) # Librería para rápida edición de dataframes
 
 
 ### CARGA DE BBDD:
