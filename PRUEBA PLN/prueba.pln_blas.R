@@ -1,5 +1,9 @@
 ## prueba PNL en BLAS
 
+# nos quedamos con las variables pertinentes y creamos una columna para identificar ID
+df_blas <- df_blas %>% 
+  select(-c(vertical_1, vertical_2, region, personalidad_destacada, x10, diario, si))%>%
+  mutate(id=1:n())
 
 
 

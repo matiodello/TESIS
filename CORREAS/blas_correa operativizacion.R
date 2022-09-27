@@ -91,6 +91,12 @@ rm(blas_media)
 
 
 
+# nos encontramos que el valor 14 es repetido
+
+df_blas <- df_blas[-14,]
+
+
+
 ######### CRONOLOGÍA --------------------------------------------------------------
 
 
@@ -141,8 +147,9 @@ tabla_freq.publicacion.blas %>%
   ggplot( aes(x=mes_anio, y= perc)) +
   geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
   coord_flip() +
-  xlab("fecha") +
-  ylab("porcentaje")+
+  labs(title = "Cantidad de publicaciones por fecha",
+       x = "fecha",y = "",
+       caption = "Fuente: elaboración propia")+
   theme_bw()
 
 
