@@ -153,13 +153,19 @@ tabla_freq.publicacion.blas %>%
   theme_bw()
 
 
-
 ## Esta dimensión, la cual mide la distribución de publicaciones totales sobre el caso Blas Correas del ElDoce.Tv en el tiempo, nos señala que el mayor porcentaje de publicaciones se encuentran en el mes de sucedido el hecho mientras que el segundo período de mayor ritmo de publicación es exactamente un año después, Agosto del 2021. 
 
 ## queda pendiente observar la distribución por semana o día quizás.
 
 
+
+
 # INTERACCIÓN -------------------------------------------------------------
+
+## interacción por fecha en extensión:
+
+
+
 
 
 
@@ -172,6 +178,8 @@ tabla_interaccion.fecha.blas <- df_blas %>%
             MEDIA_INTERACC = mean(interacciones))
 
 ## La interacción puede ser definida como la suma de todas las reacciones (me gusta, me divierte, me enoja, etc + comentarios + compartidos)
+
+
 
 
 
