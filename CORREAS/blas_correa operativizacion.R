@@ -162,11 +162,6 @@ tabla_freq.publicacion.blas %>%
 
 # INTERACCIÓN -------------------------------------------------------------
 
-## interacción por fecha en extensión:
-
-
-
-
 
 
 ## Agrupación de interacción según fecha:
@@ -175,7 +170,9 @@ tabla_interaccion.fecha.blas <- df_blas %>%
   group_by(mes_anio) %>% 
   summarise(MIN_INTERAC = min(interacciones),
             MAX_INTERAC = max(interacciones),
-            MEDIA_INTERACC = mean(interacciones))
+            MEDIA_INTERACC = mean(interacciones),
+            SUM_INTERACC = sum(interacciones))%>% 
+  arrange(desc(SUM_INTERACC))
 
 ## La interacción puede ser definida como la suma de todas las reacciones (me gusta, me divierte, me enoja, etc + comentarios + compartidos)
 
@@ -183,7 +180,7 @@ tabla_interaccion.fecha.blas <- df_blas %>%
 
 
 
-publicacion_interaccion.blas <- df_blas %>% 
+link_interaccion.blas <- df_blas %>% 
   group_by(noticia_link) %>% 
   summarise(interacciones = sum(interacciones, na.rm=TRUE)) %>% 
   arrange(desc(interacciones))
@@ -194,7 +191,18 @@ publicacion_interaccion.blas <- df_blas %>%
 
 
 
-publicaciones_comentarios.blas <- df_blas %>% 
+tabla_comentarios.fecha.blas <- df_blas %>% 
+  group_by(mes_anio) %>% 
+  summarise(MIN_COMENTS = min(comentarios_23),
+            MAX_COMENTS = max(comentarios_23),
+            MEDIA_COMENTS = mean(comentarios_23),
+            SUM_COMENTS = sum(comentarios_23))%>% 
+  arrange(desc(SUM_COMENTS))
+
+
+
+
+link_comentarios.blas <- df_blas %>% 
   group_by(noticia_link) %>% 
   summarise(comentarios_23 = sum(comentarios_23, na.rm=TRUE)) %>% 
   arrange(desc(comentarios_23))
@@ -203,7 +211,19 @@ publicaciones_comentarios.blas <- df_blas %>%
 
 # COMPARTIDOS -------------------------------------------------------------
 
-publicaciones_compartidos.blas <- df_blas %>% 
+
+
+tabla_compartidos.fecha.blas <- df_blas %>% 
+  group_by(mes_anio) %>% 
+  summarise(MIN_COMPARTIDOS = min(compartidos),
+            MAX_COMPARTIDOS = max(compartidos),
+            MEDIA_COMPARTIDOS = mean(compartidos),
+            SUM_COMPARTIDOS = sum(compartidos))%>% 
+  arrange(desc(SUM_COMPARTIDOS))
+
+
+
+link_compartidos.blas <- df_blas %>% 
   group_by(noticia_link) %>% 
   summarise(compartidos = sum(compartidos, na.rm=TRUE)) %>% 
   arrange(desc(compartidos))
@@ -225,6 +245,56 @@ publicaciones_compartidos.blas <- df_blas %>%
 
 
 # EMOCIONALIDADES ---------------------------------------------------------
+
+# Tabla de emociones agrupadas por fecha:
+
+
+tabla_emociones.blas <- df_blas %>%
+  group_by(mes_anio) %>%
+  summarise(me_gusta = sum(me_gusta, na.rm=TRUE),
+            simpatia = sum(simpatia, na.rm=TRUE),
+            asombro = sum(asombro, na.rm=TRUE),
+            diversion = sum(diversion, na.rm=TRUE),
+            descreimiento = sum(descreimiento, na.rm=TRUE),
+            tristeza = sum(tristeza, na.rm=TRUE),
+            enojo = sum(enojo, na.rm=TRUE),
+            me_importa = sum(me_importa, na.rm = TRUE),
+            total = sum(me_gusta, simpatia, asombro, diversion, descreimiento, tristeza, enojo, me_importa, na.rm = TRUE)
+  ) %>% 
+  mutate(perc = round(total/sum(total)*100, 2))%>% 
+  arrange(desc(total))
+
+
+prom_emociones.blas <- df_blas%>%
+  group_by(mes_anio) %>%
+  summarise(me_gusta = mean(me_gusta, na.rm=TRUE),
+            simpatia = mean(simpatia, na.rm=TRUE),
+            asombro = mean(asombro, na.rm=TRUE),
+            diversion = mean(diversion, na.rm=TRUE),
+            descreimiento = mean(descreimiento, na.rm=TRUE),
+            tristeza = mean(tristeza, na.rm=TRUE),
+            enojo = mean(enojo, na.rm=TRUE),
+            me_importa = mean(me_importa, na.rm = TRUE),
+            total = mean(me_gusta, simpatia, asombro, diversion, descreimiento, tristeza, enojo, me_importa, na.rm = TRUE)
+  ) 
+  
+
+
+
+tabla_emociones.blas  %>% 
+  mutate(mes_anio = fct_reorder(mes_anio, perc)) %>%
+  ggplot( aes(x=mes_anio, y= perc)) +
+  geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
+  coord_flip() +
+  labs(title = "Cantidad de publicaciones por fecha",
+       x = "fecha",y = "",
+       caption = "Fuente: elaboración propia")+
+  theme_bw()
+
+
+
+
+
 
 ME_GUSTA.blas <- df_blas %>% 
   group_by(noticia_link) %>% 
@@ -301,8 +371,7 @@ ENOJO.blas <- df_blas %>%
 ## "[URGENTE] Detuvieron a una de las policías que acompañaba a los dos agentes que mataron a Blas Correas. Confesó que plantó el arma" 12/08/2020
 
 
-
-
+  
 
 
 # PROCESAMIENTO DE LENGUAJE - NOTICIAS ------------------------------------
