@@ -483,3 +483,39 @@ tokken_coments.blas_1 <- df_blas %>%
          !str_detect(word, "eldoce.tv")) %>% 
   count(word, sort = TRUE)
 
+
+
+# frq por fecha -----------------------------------------------------------
+nombres <- read.xlsx("Nombres.xlsx")
+
+require(tidyverse)
+
+nombres[[1]] <- tolower(nombres[[1]])
+
+
+
+tokken <- df_blas %>%
+  mutate(id = mes_anio) %>%
+  unnest_tokens(word, comentarios_28) %>%
+  anti_join(my_stopwords) %>%
+  anti_join(nombres) %>% 
+  count(id, word, sort = TRUE)
+
+
+tabla2 <- tokkem_08 %>% 
+  filter(n > 50)
+
+
+
+
+library(forcats)
+
+tokken %>%
+  group_by(id) %>%
+  filter(id == "08/2020" | id == "08/2021" | id == "08/2022") %>% 
+  slice_max(n, n = 15) %>%
+  ungroup() %>%
+  ggplot(aes(n, fct_reorder(word, n), fill = id)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~id, ncol = 2, scales = "free") +
+  labs(x = "tf-idf", y = NULL)

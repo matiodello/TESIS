@@ -43,7 +43,7 @@ library(editData) #an RStudio addin for editing a ‘data.frame’ or a ‘tibbl
 
 # Cargamos el data set limpio donde se encuentran todas las publicaciones referidas al Caso Blas Correa:
 
-joaquin_paredes <- read_csv("joaquin_paredes.csv")
+joaquin_paredes <- read_csv("D:/UNVM/Rstudio - TESIS/TESIS/PAREDES/joaquin_paredes.csv")
 
 ## Corpus con palabras "vacías":
 
@@ -91,6 +91,7 @@ df_paredes$date <- as.Date(df_paredes$fecha)
 # Luego generamos otra variable que contenga solamente año y mes para  poder agrupar por años
 df_paredes$mes_anio <- format(df_paredes$date, "%m/%Y")
 
+rm(joaquin_paredes)
 
 # Ahora vamos a ver la fecha mínima y máxima para tener desde y hasta cuándo van las fechas de nuestros datos.
 
@@ -316,5 +317,44 @@ tokken_coments.paredes <- df_paredes %>%
 
 
 
+
+
+
+
+
+
+
+nombres <- read.xlsx("Nombres.xlsx")
+
+require(tidyverse)
+
+nombres[[1]] <- tolower(nombres[[1]])
+
+
+
+tokken <- df_paredes %>%
+  mutate(id = mes_anio) %>%
+  unnest_tokens(word, comentarios_28) %>%
+  anti_join(my_stopwords) %>%
+  count(id, word, sort = TRUE)
+
+
+tabla2 <- tokkem_08 %>% 
+  filter(n > 50)
+
+
+
+
+library(forcats)
+
+tokken %>%
+  group_by(id) %>%
+  filter(id == "10/2020" | id == "10/2021") %>% 
+  slice_max(n, n = 10) %>%
+  ungroup() %>%
+  ggplot(aes(n, fct_reorder(word, n), fill = id)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~id, ncol = 2, scales = "free") +
+  labs(x = "tf-idf", y = NULL)
 
 
