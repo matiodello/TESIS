@@ -1,6 +1,6 @@
-# TESIS
-TFG - Sociología UNVM
+# THESIS
 
+Bachelor's Degree Final Project in Sociology, National University of Villa María.
 
 Este repositorio consta de dos casos de estudio BLAS CORREAS y JOAQUÍN PAREDES. 
 
