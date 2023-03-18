@@ -4,9 +4,12 @@ Bachelor's Degree Final Project in Sociology, National University of Villa Marí
 
 Este repositorio consta de dos casos de estudio BLAS CORREAS y JOAQUÍN PAREDES. 
 
-* Cada directorio consta de: un script exploratorio y un script de operativización de variables para su estudio
+Each directory includes: 
+* An exploratory script and a variable operationalization script for study purposes.
+* As an appendix, a directory is added with all the comments of each relevant publication.
 
-* Como anexo se suma un directorio con todos los comentarios de cada publicación relevada. 
+
+
 
 
 ## PROBLEMA DE INVESTIGACIÓN:
